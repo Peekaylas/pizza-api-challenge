@@ -1,22 +1,49 @@
-from server import app, db
-from server.models.restaurant import Restaurant
-from server.models.pizza import Pizza
-from server.models.restaurant_pizza import RestaurantPizza
+import sys
+from os.path import abspath, dirname
 
-with app.app_context():
-    db.create_all()
+sys.path.insert(0, dirname(dirname(abspath(__file__))))
 
-    r1 = Restaurant(name="Kiki's Pizza", address="address3")
-    r2 = Restaurant(name="Emma's", address="address1")
-    db.session.add_all([r1, r2])
-    db.session.commit()
+from server import create_app, db
+from server.models import Restaurant, Pizza, RestaurantPizza
 
-    p1 = Pizza(name="Margherita", ingredients="Dough, Tomato Sauce, Cheese")
-    p2 = Pizza(name="Pepperoni", ingredients="Dough, Tomato Sauce, Cheese, Pepperoni")
-    db.session.add_all([p1, p2])
-    db.session.commit()
+def seed_data():
+    app = create_app()
+    
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+        
+        restaurants = [
+            Restaurant(name="Pizza Palace", address="123 Main St"),
+            Restaurant(name="Italian Bistro", address="456 Oak Ave"),
+            Restaurant(name="Slice of Heaven", address="789 Pine Rd")
+        ]
+        db.session.add_all(restaurants)
+        
+        pizzas = [
+            Pizza(name="Margherita", ingredients="Tomato sauce, mozzarella, basil"),
+            Pizza(name="Pepperoni", ingredients="Tomato sauce, mozzarella, pepperoni"),
+            Pizza(name="Vegetarian", ingredients="Tomato sauce, mozzarella, bell peppers, mushrooms, onions"),
+            Pizza(name="Hawaiian", ingredients="Tomato sauce, mozzarella, ham, pineapple"),
+            Pizza(name="BBQ Chicken", ingredients="BBQ sauce, mozzarella, chicken, red onions")
+        ]
+        db.session.add_all(pizzas)
+        
+        db.session.commit()
+        
+        restaurant_pizzas = [
+            RestaurantPizza(price=10, restaurant_id=1, pizza_id=1),
+            RestaurantPizza(price=12, restaurant_id=1, pizza_id=2),
+            RestaurantPizza(price=15, restaurant_id=2, pizza_id=3),
+            RestaurantPizza(price=14, restaurant_id=2, pizza_id=4),
+            RestaurantPizza(price=16, restaurant_id=3, pizza_id=5),
+            RestaurantPizza(price=11, restaurant_id=3, pizza_id=1)
+        ]
+        db.session.add_all(restaurant_pizzas)
+        
+        db.session.commit()
+        
+        print("Database seeded successfully!")
 
-    rp1 = RestaurantPizza(price=10, restaurant_id=1, pizza_id=1)
-    rp2 = RestaurantPizza(price=12, restaurant_id=2, pizza_id=2)
-    db.session.add_all([rp1, rp2])
-    db.session.commit()
+if __name__ == '__main__':
+    seed_data()
