@@ -23,9 +23,6 @@ class RestaurantPizza(db.Model):
             raise ValueError("Price must be between 1 and 30")
         return price
 
-    def __repr__(self):
-        return f'<RestaurantPizza ${self.price}>'
-    
     def to_dict(self):
         return {
             'id': self.id,

@@ -16,9 +16,6 @@ class Restaurant(db.Model):
             raise ValueError("Name must be less than 50 characters")
         return name
 
-    def __repr__(self):
-        return f'<Restaurant {self.name}>'
-    
     def to_dict(self):
         return {
             'id': self.id,

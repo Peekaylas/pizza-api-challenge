@@ -8,7 +8,6 @@ from server.models import Restaurant, Pizza, RestaurantPizza
 
 def seed_data():
     app = create_app()
-    
     with app.app_context():
         db.drop_all()
         db.create_all()
@@ -23,9 +22,7 @@ def seed_data():
         pizzas = [
             Pizza(name="Margherita", ingredients="Tomato sauce, mozzarella, basil"),
             Pizza(name="Pepperoni", ingredients="Tomato sauce, mozzarella, pepperoni"),
-            Pizza(name="Vegetarian", ingredients="Tomato sauce, mozzarella, bell peppers, mushrooms, onions"),
-            Pizza(name="Hawaiian", ingredients="Tomato sauce, mozzarella, ham, pineapple"),
-            Pizza(name="BBQ Chicken", ingredients="BBQ sauce, mozzarella, chicken, red onions")
+            Pizza(name="Vegetarian", ingredients="Tomato sauce, mozzarella, bell peppers, mushrooms, onions")
         ]
         db.session.add_all(pizzas)
         
@@ -34,10 +31,7 @@ def seed_data():
         restaurant_pizzas = [
             RestaurantPizza(price=10, restaurant_id=1, pizza_id=1),
             RestaurantPizza(price=12, restaurant_id=1, pizza_id=2),
-            RestaurantPizza(price=15, restaurant_id=2, pizza_id=3),
-            RestaurantPizza(price=14, restaurant_id=2, pizza_id=4),
-            RestaurantPizza(price=16, restaurant_id=3, pizza_id=5),
-            RestaurantPizza(price=11, restaurant_id=3, pizza_id=1)
+            RestaurantPizza(price=15, restaurant_id=2, pizza_id=3)
         ]
         db.session.add_all(restaurant_pizzas)
         

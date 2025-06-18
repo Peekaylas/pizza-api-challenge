@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify
 from server import db
 from server.models import Restaurant, RestaurantPizza
 
@@ -15,17 +15,13 @@ def get_restaurants():
 
 @restaurants_bp.route('/restaurants/<int:id>', methods=['GET'])
 def get_restaurant(id):
-    restaurant = Restaurant.query.get(id)
-    if not restaurant:
-        return jsonify({"error": "Restaurant not found"}), 404
-    
+    restaurant = Restaurant.query.get_or_404(id)
     pizzas = [{
         'id': rp.pizza.id,
         'name': rp.pizza.name,
         'ingredients': rp.pizza.ingredients,
         'price': rp.price
     } for rp in restaurant.restaurant_pizzas]
-    
     return jsonify({
         'id': restaurant.id,
         'name': restaurant.name,
@@ -35,11 +31,7 @@ def get_restaurant(id):
 
 @restaurants_bp.route('/restaurants/<int:id>', methods=['DELETE'])
 def delete_restaurant(id):
-    restaurant = Restaurant.query.get(id)
-    if not restaurant:
-        return jsonify({"error": "Restaurant not found"}), 404
-    
+    restaurant = Restaurant.query.get_or_404(id)
     db.session.delete(restaurant)
     db.session.commit()
-    
     return '', 204
